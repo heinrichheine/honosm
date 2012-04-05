@@ -3,10 +3,10 @@ function getStreetname(lat, lon, callback) {
     
     // compute box for api request
     var bbox = {
-        'minLat' : lat - 0.000035,  // left
-        'maxLat' : lat + 0.000035, // right
-        'minLon' : lon - 0.000048, // bottom
-        'maxLon' : lon + 0.000048 // top
+        'minLat' : parseFloat(lat) - 0.000065,  // left
+        'maxLat' : parseFloat(lat) + 0.000065, // right
+        'minLon' : parseFloat(lon) - 0.000078, // bottom
+        'maxLon' : parseFloat(lon) + 0.000078 // top
     };
     // call api
     var osm = require('./osm');

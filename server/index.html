@@ -1,1 +1,70 @@
-yeah
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>
+        </title>
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css" />
+        <style>
+            /* App custom styles */
+        </style>
+        <script src="jquery-1.7.1.js"></script>
+        <script src="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js">
+        </script>
+        
+        <script type="text/javascript" language="javascript">
+        function error(msg) {
+  			console.log(typeof msg == 'string' ? msg : "error");
+		}
+                
+        function gatherPosition() {
+            $.mobile.showPageLoadingMsg();
+            if (navigator.geolocation) {
+      			navigator.geolocation.getCurrentPosition(function( position ) {
+
+      			   var lat = position.coords.latitude;
+  			       var lon = position.coords.longitude;
+  			       // update text
+  			       $("#currentPosition").html("lat: " + lat + "<br/>lon: " + lon);
+  			       $.mobile.hidePageLoadingMsg();	
+      			}, error);
+    		} else {
+      			alert("GeoLocation API ist NICHT verfügbar!");
+    	 }
+        }
+        
+        
+               
+        
+        $(document).ready(function() {
+            $.mobile.loadingMessage = "Determine position";
+            
+            $("#buttonGPS").click(gatherPosition);
+        });
+    </script>
+    </head>
+    <body>
+        <div data-role="page" id="page1">
+            <div data-theme="e" data-role="header">
+                <h3>
+                    HonOSM
+                </h3>
+                <a id="buttonGPS" data-role="button" data-inline="true" href="" data-icon="gear" data-iconpos="left">
+                    Track
+                </a>
+            </div>
+            <div data-role="content">
+                <h4>
+                    Current Position
+                </h4>
+                <div id="currentPosition">
+                        unknown
+                </div>
+            </div>
+        </div>
+        <script>
+            //App custom javascript
+        </script>
+    </body>
+</html>

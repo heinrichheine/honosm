@@ -13,6 +13,20 @@ var deliverIndex = function(request, response) {
     }); 
 };
 
+var deliverJQuery = function(request, response) {
+    var fs = require('fs');
+    fs.readFile("server/lib/jquery-1.7.1.js", "binary", function(err, file) {  
+            if(err) {  
+                response.writeHead(500, {"Content-Type": "text/plain"});  
+                response.end(err + "\n");  
+                return;  
+            }  
+            response.writeHead(200);  
+            response.end(file, "binary");  
+    }); 
+    
+    };
+
 // defautl 404 error page
 var ftInvalidURL = function(req, res) {
     res.writeHead(404, {'Content-Type': 'text/plain'});
@@ -23,5 +37,6 @@ var ftDeliverIndex = deliverIndex;
 
 module.exports = {
     deliverIndex : ftDeliverIndex,
-    invalidUrl : ftInvalidURL
+    invalidUrl : ftInvalidURL,
+    deliverJQuery : deliverJQuery
     };
