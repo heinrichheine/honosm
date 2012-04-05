@@ -1,3 +1,4 @@
+var PORT = 9900
 
 
 // some basic constants for the request routing
@@ -33,10 +34,10 @@ http.createServer(function (request, response) {
         mapped(request, response);
     } else {
       console.log(request.url + ' has not been mapped');
-      baseDelivery.invalidURL(request, response);
+      baseDelivery.invalidUrl(request, response);
     }  
     
     
     
-}).listen(process.env.PORT);
-console.log("server running at port " + process.env.PORT);
+}).listen(PORT);
+console.log("server running at port " + PORT);

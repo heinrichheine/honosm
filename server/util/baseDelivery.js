@@ -2,7 +2,7 @@
 // deliver just index.html
 var deliverIndex = function(request, response) {
     var fs = require('fs');
-    fs.readFile("server/index.html", "binary", function(err, file) {  
+    fs.readFile(__dirname + "/../index.html", "binary", function(err, file) {  
             if(err) {  
                 response.writeHead(500, {"Content-Type": "text/plain"});  
                 response.end(err + "\n");  
@@ -15,7 +15,7 @@ var deliverIndex = function(request, response) {
 
 var deliverJQuery = function(request, response) {
     var fs = require('fs');
-    fs.readFile("server/lib/jquery-1.7.1.js", "binary", function(err, file) {  
+    fs.readFile(__dirname + "/../lib/jquery-1.7.1.js", "binary", function(err, file) {  
             if(err) {  
                 response.writeHead(500, {"Content-Type": "text/plain"});  
                 response.end(err + "\n");  
