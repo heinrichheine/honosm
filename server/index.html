@@ -13,11 +13,40 @@
 
 
     <script type="text/javascript" language="javascript">
+
+        var currentLat;
+        var currentLon;
+
+
         function error(msg) {
-            console.log(typeof msg == 'string' ? msg : "error");
+            console.log(typeof msg == 'string' ? msg : msg.code);
+            $("#currentPosition").html("error code: " + msg.code);
         }
 
+        function success(position) {
+
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+
+            $("#currentPosition").html("lat: " + lat + "<br/>lon: " + lon);
+            console.log(position.coords.latitude);
+            console.log(position.coords.longitude);
+        }
+
+
         function gatherPosition() {
+            if (navigator.geolocation) {
+                var watchId = navigator.geolocation.watchPosition(success, error,
+                        {
+                            enableHighAccuracy: true,
+                            timeout: 60000,
+                            maximumAge: 0
+                        });
+
+            }
+        }
+
+        /*function gatherPosition() {
             $.mobile.showPageLoadingMsg();
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function (position) {
@@ -56,7 +85,7 @@
                 alert("GeoLocation API ist NICHT verfügbar!");
             }
         }
-
+*/
 
         $(document).ready(function () {
             $.mobile.loadingMessage = "Determine position";
@@ -75,7 +104,49 @@
             Track
         </a>
     </div>
+
     <div data-role="content">
+        <form action="">
+            <div data-role="fieldcontain">
+                <fieldset data-role="controlgroup">
+                    <label for="textinput2">
+                        Housenumber
+                    </label>
+                    <input id="textinput2" placeholder="" value="" type="text" />
+                </fieldset>
+            </div>
+            <div data-role="fieldcontain">
+                <label for="selectmenu1">
+                    Street
+                </label>
+                <select name="streetselect" id="streetselect" data-theme="e" data-mini="true">
+                    <option value="123">
+                        Strasse 1
+                    </option>
+                    <option value="321">
+                        Strasse 2
+                    </option>
+                    <option value="333">
+                        Strasse 3
+                    </option>
+                </select>
+            </div>
+            <input value="Save Housenumber" type="submit" />
+        </form>
+        <img src="https://maps.googleapis.com/maps/api/staticmap?center=Madison,%20WI&amp;zoom=14&amp;size=288x200&amp;markers=Madison,%20WI&amp;sensor=false" height="200" width="288" />
+        </div>
+    <h4>
+        Current Position
+    </h4>
+
+    <div id="currentPosition">
+        unknown
+    </div>
+    </div>
+
+
+
+    <!-- div data-role="content">
         <h4>
             Current Position
         </h4>
@@ -83,7 +154,7 @@
         <div id="currentPosition">
             unknown
         </div>
-    </div>
+    </div -->
 
 </div>
 <script>
