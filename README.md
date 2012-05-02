@@ -1,18 +1,20 @@
-# README for a newly created project.
+# HonOSM - HouseNumber OpenStreetMap
 
-There are a couple of things you should do first, before you can use all of Git's power:
+This project is intended to create a slick and easy web application to record and upload housenumbers to the OSM-Servers.
+The plan is to walk by a house (in real life outside) and use yyour smartphone to type in the housenumber. By acquiring the geo position by the 
+html5 geolocation api, HonOSM will detect the street you are currently on and you can submit the housenumber as tag and member of the street relation to the OSM-Server.
 
-  * Add a remote to this project: in the Cloud9 IDE command line, you can execute the following commands
-    `git remote add [remote name] [remote url (eg. 'git@github.com:/ajaxorg/node_chat')]` [Enter]
-  * Create new files inside your project
-  * Add them to to Git by executing the following command
-    `git add [file1, file2, file3, ...]` [Enter]
-  * Create a commit which can be pushed to the remote you just added
-    `git commit -m 'added new files'` [Enter]
-  * Push the commit the remote
-    `git push [remote name] master` [Enter]
+Reason for this project: Using walking-papers to track down each housenumber is quite boring and it might speed up the workflow to get all housenumbers of the world.
 
-That's it! If this doesn't work for you, please visit the excellent resources from [Github.com](http://help.github.com) and the [Pro Git](http://http://progit.org/book/) book.
-If you can't find your answers there, feel free to ask us via Twitter (@cloud9ide), [mailing list](groups.google.com/group/cloud9-ide) or IRC (#cloud9ide on freenode).
 
-Happy coding!
+## Technology
+Its based on nodejs and some of its plugins, jquery and jquery mobile:
+  * libxmljs
+  * eyes (debug only)
+  
+## Starting
+get the code from github and type
+  node omsproxy.js
+and point your browser to the location localhost:9900
+
+
