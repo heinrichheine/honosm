@@ -14,7 +14,9 @@ Its based on nodejs and some of its plugins, jquery and jquery mobile:
   
 ## Starting
 get the code from github and type
+
   node omsproxy.js
+
 and point your browser to the location localhost:9900
 
 
