@@ -16,8 +16,33 @@
 
         var currentLat;
         var currentLon;
+        var watchId;
 
+        function getStreet(lat, lon) {
+            // send position to server to get the streetname
+            var posRequest = $.ajax({
+                url:"getstreetname?lat=" + lat + "&lon=" + lon,
+                type:"GET",
+                dataType:"json",
+                success:function (data) {
+                    console.log("Name empfangen");
+                    console.log(data.name);
 
+                    $("#streetselect").empty();
+                    streets = "";
+                    for (var street in data.name) {
+                        streets += street + "<br/> ";
+                        $("#streetselect").append('<option value="' + data[street]+'">'+street+'</option>');
+                    }
+
+                    $("#currentPosition").html("Streets:<br/> " + streets);
+                },
+                error:function () {
+                    alert("error")
+                }
+            });
+        }
+        
         function error(msg) {
             console.log(typeof msg == 'string' ? msg : msg.code);
             $("#currentPosition").html("error code: " + msg.code);
@@ -25,18 +50,22 @@
 
         function success(position) {
 
-            var lat = position.coords.latitude;
-            var lon = position.coords.longitude;
+            navigator.geolocation.clearWatch(watchId);
+            currentLat = position.coords.latitude;
+            currentLon = position.coords.longitude;
 
-            $("#currentPosition").html("lat: " + lat + "<br/>lon: " + lon);
+            $("#currentPosition").html("lat: " + currentLat + "<br/>lon: " + currentLon);
             console.log(position.coords.latitude);
             console.log(position.coords.longitude);
+
+            getStreet(currentLat, currentLon);
         }
 
 
         function gatherPosition() {
             if (navigator.geolocation) {
-                var watchId = navigator.geolocation.watchPosition(success, error,
+                navigator.geolocation.clearWatch(watchId);
+                watchId = navigator.geolocation.watchPosition(success, error,
                         {
                             enableHighAccuracy: true,
                             timeout: 60000,
