@@ -30,10 +30,19 @@
 
                     $("#streetselect").empty();
                     streets = "";
+                    var firstStreetSet = 0;
                     for (var street in data.name) {
+                        
                         streets += street + "<br/> ";
+                        if ( firstStreetSet == 0) {
+                            $("#streetselect").append('<option value="' + data[street]+'">'+street+'</option>');
+                            $("#streetselect").val(data[street]);
+                            firstStreetSet = 1;
+                     } else {
                         $("#streetselect").append('<option value="' + data[street]+'">'+street+'</option>');
+                     }
                     }
+                    $("#streetselect").selectmenu("refresh");
 
                     $("#currentPosition").html("Streets:<br/> " + streets);
                 },
@@ -43,6 +52,15 @@
             });
         }
         
+        function updateMapImage(lat, lon) {
+
+            var posString = lat+","+lon;
+            var mapImgUrl = "http://staticmap.openstreetmap.de/staticmap.php?center="+posString+"&zoom=18&size=865x512&maptype=mapnik&markers="+posString;
+            //var mapimgUrl="https://maps.googleapis.com/maps/api/staticmap?center="+posString+"&zoom=17&size=288x200&markers="+posString+"&sensor=true"
+            console.log(mapImgUrl);
+            $("#googleimg").attr("src", mapImgUrl);
+        }
+
         function error(msg) {
             console.log(typeof msg == 'string' ? msg : msg.code);
             $("#currentPosition").html("error code: " + msg.code);
@@ -59,6 +77,7 @@
             console.log(position.coords.longitude);
 
             getStreet(currentLat, currentLon);
+            updateMapImage(currentLat, currentLon);
         }
 
 
@@ -149,20 +168,11 @@
                     Street
                 </label>
                 <select name="streetselect" id="streetselect" data-theme="e" data-mini="true">
-                    <option value="123">
-                        Strasse 1
-                    </option>
-                    <option value="321">
-                        Strasse 2
-                    </option>
-                    <option value="333">
-                        Strasse 3
-                    </option>
                 </select>
             </div>
             <input value="Save Housenumber" type="submit" />
         </form>
-        <img src="https://maps.googleapis.com/maps/api/staticmap?center=Madison,%20WI&amp;zoom=14&amp;size=288x200&amp;markers=Madison,%20WI&amp;sensor=false" height="200" width="288" />
+        <img id="googleimg" src="" height="200" width="288" />
         </div>
     <h4>
         Current Position
