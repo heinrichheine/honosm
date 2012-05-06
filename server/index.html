@@ -17,7 +17,31 @@
         var currentLat;
         var currentLon;
         var watchId;
+        
+        /*
+         * streetData is a JSON object of pairs of streetname:streetId
+         */
+        function updateStreetSelector(streetData) {
+            
+            $("#streetselect").empty();
+            streets = "";
+            var firstStreetSet = 0;
+            for (var street in streetData.name) {
+                var streetId = streetData[street];
+                streets += street + "<br/> ";
+                if ( firstStreetSet == 0) {
+                    $("#streetselect").append('<option value="' + streetId+'">'+street+'</option>');
+                    $("#streetselect").val(streetId);
+                    firstStreetSet = 1;
+                } else {
+                    $("#streetselect").append('<option value="' + streetId+'">'+street+'</option>');
+                }
+            }
+            $("#streetselect").selectmenu("refresh");
 
+            $("#currentPosition").html("Streets:<br/> " + streets);        
+        }
+        
         function getStreet(lat, lon) {
             // send position to server to get the streetname
             var posRequest = $.ajax({
@@ -25,26 +49,8 @@
                 type:"GET",
                 dataType:"json",
                 success:function (data) {
-                    console.log("Name empfangen");
-                    console.log(data.name);
-
-                    $("#streetselect").empty();
-                    streets = "";
-                    var firstStreetSet = 0;
-                    for (var street in data.name) {
-                        
-                        streets += street + "<br/> ";
-                        if ( firstStreetSet == 0) {
-                            $("#streetselect").append('<option value="' + data[street]+'">'+street+'</option>');
-                            $("#streetselect").val(data[street]);
-                            firstStreetSet = 1;
-                     } else {
-                        $("#streetselect").append('<option value="' + data[street]+'">'+street+'</option>');
-                     }
-                    }
-                    $("#streetselect").selectmenu("refresh");
-
-                    $("#currentPosition").html("Streets:<br/> " + streets);
+                     
+                    updateStreetSelector(data) 
                 },
                 error:function () {
                     alert("error")
@@ -56,9 +62,8 @@
 
             var posString = lat+","+lon;
             var mapImgUrl = "http://staticmap.openstreetmap.de/staticmap.php?center="+posString+"&zoom=18&size=865x512&maptype=mapnik&markers="+posString;
-            //var mapimgUrl="https://maps.googleapis.com/maps/api/staticmap?center="+posString+"&zoom=17&size=288x200&markers="+posString+"&sensor=true"
-            console.log(mapImgUrl);
-            $("#googleimg").attr("src", mapImgUrl);
+            
+            $("#mapImage").attr("src", mapImgUrl);
         }
 
         function error(msg) {
@@ -172,7 +177,7 @@
             </div>
             <input value="Save Housenumber" type="submit" />
         </form>
-        <img id="googleimg" src="" height="200" width="288" />
+        <img id="mapImage" src="" height="200" width="288" />
         </div>
     <h4>
         Current Position
