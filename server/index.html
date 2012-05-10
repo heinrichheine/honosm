@@ -10,7 +10,7 @@
     </style>
     <script src="/jquery-1.7.1.js"></script>
     <script src="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js"></script>
-
+    <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
 
     <script type="text/javascript" language="javascript">
 
@@ -18,6 +18,8 @@
         var currentLon;
         var watchId;
         
+        
+                
         /*
          * streetData is a JSON object of pairs of streetname:streetId
          */
@@ -59,11 +61,29 @@
         }
         
         function updateMapImage(lat, lon) {
-
+            
             var posString = lat+","+lon;
             var mapImgUrl = "http://staticmap.openstreetmap.de/staticmap.php?center="+posString+"&zoom=18&size=865x512&maptype=mapnik&markers="+posString;
             
             $("#mapImage").attr("src", mapImgUrl);
+            
+            
+            
+            var lonlat = new OpenLayers.LonLat( lon, lat );
+            lonlat.transform( new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject() );
+            
+            /* var markers = new OpenLayers.Layer.Markers( "Markers" );
+            map.addLayer(markers);
+ 
+            markers.addMarker(new OpenLayers.Marker(lonLat));
+            */
+            
+            map.setCenter( lonlat, 18 );
+            
+            
+            //map.setCenter(new OpenLayers.LonLat(lat, lon), 17);
+            
+            
         }
 
         function error(msg) {
@@ -186,20 +206,17 @@
     <div id="currentPosition">
         unknown
     </div>
+    <div id="demoMap" style="height:350px; width:100%;"></div>
+    <script>
+        var map = new OpenLayers.Map("demoMap");
+        map.addLayer(new OpenLayers.Layer.OSM());
+        map.zoomToMaxExtent();
+    </script>
     </div>
 
 
 
-    <!-- div data-role="content">
-        <h4>
-            Current Position
-        </h4>
-
-        <div id="currentPosition">
-            unknown
-        </div>
-    </div -->
-
+    
 </div>
 <script>
     //App custom javascript
