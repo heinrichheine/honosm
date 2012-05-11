@@ -95,6 +95,21 @@
         function gatherPosition() {
             if (navigator.geolocation) {
                 navigator.geolocation.clearWatch(watchId);
+                
+               for (var i = 0; i <= 20; i++) 
+                    navigator.geolocation.watchPosition(function() {}, function() {},
+                        {
+                            enableHighAccuracy: true,
+                            timeout: 60000,
+                            maximumAge: 0
+                        });
+               /*     navigator.geolocation.getCurrentPosition({
+                            enableHighAccuracy: true,
+                            timeout: 60000,
+                            maximumAge: 0
+                        });
+                */
+                console.log("start watch gps");
                 watchId = navigator.geolocation.watchPosition(success, error,
                         {
                             enableHighAccuracy: true,
