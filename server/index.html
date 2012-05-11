@@ -62,27 +62,13 @@
         
         function updateMapImage(lat, lon) {
             
-            var posString = lat+","+lon;
-            var mapImgUrl = "http://staticmap.openstreetmap.de/staticmap.php?center="+posString+"&zoom=18&size=865x512&maptype=mapnik&markers="+posString;
-            
-            $("#mapImage").attr("src", mapImgUrl);
-            
-            
-            
             var lonlat = new OpenLayers.LonLat( lon, lat );
             lonlat.transform( new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject() );
-            
-            /* var markers = new OpenLayers.Layer.Markers( "Markers" );
-            map.addLayer(markers);
- 
-            markers.addMarker(new OpenLayers.Marker(lonLat));
-            */
-            
+                        
+            var currentPositionMarker = new OpenLayers.Marker(lonlat, icon);
+            markers.addMarker(currentPositionMarker);
+           
             map.setCenter( lonlat, 18 );
-            
-            
-            //map.setCenter(new OpenLayers.LonLat(lat, lon), 17);
-            
             
         }
 
@@ -119,46 +105,6 @@
             }
         }
 
-        /*function gatherPosition() {
-            $.mobile.showPageLoadingMsg();
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-
-                    var lat = position.coords.latitude;
-                    var lon = position.coords.longitude;
-
-                    // update text
-                    $("#currentPosition").html("lat: " + lat + "<br/>lon: " + lon);
-                    $.mobile.hidePageLoadingMsg();
-
-                    // send position to server to get the streetname
-                    var posRequest = $.ajax({
-                        url:"getstreetname?lat=" + lat + "&lon=" + lon,
-                        type:"GET",
-                        dataType:"json",
-                        success:function (data) {
-                            console.log("Name empfangen");
-                            console.log(data.name);
-
-                            streets = "";
-                            for (var street in data.name) {
-                                streets += street + "<br/> ";
-                            }
-
-                            $("#currentPosition").html("Streets:<br/> " + streets);
-                        },
-                        error:function () {
-                            alert("error")
-                        }
-                    });
-
-
-                }, error);
-            } else {
-                alert("GeoLocation API ist NICHT verfügbar!");
-            }
-        }
-*/
 
         $(document).ready(function () {
             $.mobile.loadingMessage = "Determine position";
@@ -197,8 +143,7 @@
             </div>
             <input value="Save Housenumber" type="submit" />
         </form>
-        <img id="mapImage" src="" height="200" width="288" />
-        </div>
+       </div>
     <h4>
         Current Position
     </h4>
@@ -209,7 +154,17 @@
     <div id="demoMap" style="height:350px; width:100%;"></div>
     <script>
         var map = new OpenLayers.Map("demoMap");
-        map.addLayer(new OpenLayers.Layer.OSM());
+        map.addLayer(new OpenLayers.Layer.OSM());        
+        var markers = new OpenLayers.Layer.Markers( "Markers" );
+        
+        var size = new OpenLayers.Size(21,25);
+        var offset = new OpenLayers.Pixel(-11, -12);
+        var icon = new OpenLayers.Icon('http://www.openlayers.org/dev/img/marker.png', size, offset);
+        
+        map.addLayer(markers);
+
+        
+        
         map.zoomToMaxExtent();
     </script>
     </div>
