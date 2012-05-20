@@ -4,19 +4,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>
     </title>
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css"/>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css"/>
     <style>
             /* App custom styles */
     </style>
     <script src="/jquery-1.7.1.js"></script>
-    <script src="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
     <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
 
     <script type="text/javascript" language="javascript">
-
+        var SESSION_KEY = "honosmClientSessionKey";
+        
         var currentLat;
         var currentLon;
         var watchId;
+        var osmusername;
+        var osmpassword;
         
         
                 
@@ -62,6 +65,7 @@
         
         function updateMapImage(lat, lon) {
             
+<<<<<<< HEAD
             var lonlat = new OpenLayers.LonLat( lon, lat );
             lonlat.transform( new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject() );
                         
@@ -70,6 +74,16 @@
            
             map.setCenter( lonlat, 18 );
             
+=======
+            var posString = lat+","+lon;
+            var mapImgUrl = "http://staticmap.openstreetmap.de/staticmap.php?center="+posString+"&zoom=18&size=865x512&maptype=mapnik&markers="+posString;
+            
+            $("#mapImage").attr("src", mapImgUrl);
+
+            var lonlat = new OpenLayers.LonLat( lon, lat );
+            lonlat.transform( new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject() );
+            map.setCenter( lonlat, 18 );            
+>>>>>>> introduced sessions for clients to store future oauth tokens
         }
 
         function error(msg) {
@@ -120,23 +134,67 @@
             }
         }
 
+<<<<<<< HEAD
+=======
+        function acquireSessionId() {
+                // get possible local session id and send to server
+                // server will response with either the same session id if it is still valid
+                // or will create a new one.
+                console.log("acquire session id");
+                var sessionKey = localStorage.getItem( SESSION_KEY );
+                $.ajax({
+                    url:"getsession?id=" + sessionKey,
+                    type:"GET",
+                    dataType:"text",
+                    success:function (data) {
+                         
+                        localStorage.setItem( SESSION_KEY, data);
+                    },
+                    error:function () {
+                        alert("error retrieving session id from server. please reload")
+                    }
+                });               
+            }            
+        
+>>>>>>> introduced sessions for clients to store future oauth tokens
 
         $(document).ready(function () {
             $.mobile.loadingMessage = "Determine position";
+            acquireSessionId();
+            
+            
 
             $("#buttonGPS").click(gatherPosition);
+            $("#saveNumberButton").click ( submitHousenumber () );
+            // add osmdialog close action
+            $("#osmloginsubmit").click(
+                function() {
+                    osmusername=$("#osmusername").val();
+                    osmpassword=$("#osmpassword").val();
+                    $('.ui-dialog').dialog('close');
+                    
+                    console.log("user: " + osmusername);
+                    
+                    $("#osmloginbutton").html("logout");
+                }
+            );
+            
         });
     </script>
 </head>
 <body>
+
+
+
 <div data-role="page" id="mappage">
-    <div data-theme="e" data-role="header">
+    <div data-theme="e" data-role="header" >
         <h3>
             HonOSM
         </h3>
         <a id="buttonGPS" data-role="button" data-inline="true" href="" data-icon="gear" data-iconpos="left">
             Track
         </a>
+        <a id="osmloginbutton" href="#osmlogin" data-rel="dialog"  data-icon="alert" >Log in to OSM</a>
     </div>
 
     <div data-role="content">
@@ -156,7 +214,7 @@
                 <select name="streetselect" id="streetselect" data-theme="e" data-mini="true">
                 </select>
             </div>
-            <input value="Save Housenumber" type="submit" />
+            <a id="saveNumberButton" data-role="button" data-icon="check" data-inline="true" >Save Housenumber</a>
         </form>
        </div>
     <h4>
@@ -187,6 +245,42 @@
 
 
     
+</div>
+
+<div data-role="page" id="osmlogin">
+    <div data-theme="e" data-role="header" >
+        <h3>
+            Login to Openstreetmap
+        </h3>
+        
+    </div>
+    <div data-role="content">
+                 <form action="">
+                    <div data-role="fieldcontain">
+                        <fieldset data-role="controlgroup">
+                            <label for="osmuser">
+                                openstreetmap username
+                            </label>
+                            <input id="osmusername" placeholder="" value="" type="text" />
+                        </fieldset>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <fieldset data-role="controlgroup">
+                            <label for="textinput2">
+                                password
+                            </label>
+                            <input id="osmpassword" placeholder="" value="" type="password" />
+                        </fieldset>
+                    </div>
+                    <div>
+                        Please note: Your openstreetmap.org user credentials are only stored on your smartphone and transmitted to the openstreetmap.org server to commit housenumbers. 
+Your username and password are not transfered to the honosm server!
+                    </div>
+
+
+                </form>
+               <a id="osmloginsubmit" data-role="button" data-inline="true" href="#" data-icon="check" data-iconpos="left">Login</a>
+     </div>
 </div>
 <script>
     //App custom javascript

@@ -17,7 +17,7 @@ module.exports = {
                 headers:{'Content-Type':'text/xml'}
             };
 
-            console.log("connecting to " + options.host + options.path);
+            log("connecting to " + options.host + options.path);
 
             http.get(options, function (response) {
 
@@ -30,7 +30,7 @@ module.exports = {
 
                 //write the data at the end
                 response.on('end', function () {
-                    console.log("received data from osm server");
+                    log("received data from osm server");
                     callback(pageData);
                 });
 

@@ -10,6 +10,8 @@ Reason for this project: Using walking-papers to track down each housenumber is 
 ## Technology
 Its based on nodejs and some of its plugins, jquery and jquery mobile:
   * libxmljs
+  * node-uuid
+  * logging
   * eyes (debug only)
   
 ## Starting
