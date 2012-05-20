@@ -65,7 +65,7 @@
         
         function updateMapImage(lat, lon) {
             
-<<<<<<< HEAD
+
             var lonlat = new OpenLayers.LonLat( lon, lat );
             lonlat.transform( new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject() );
                         
@@ -74,7 +74,7 @@
            
             map.setCenter( lonlat, 18 );
             
-=======
+
             var posString = lat+","+lon;
             var mapImgUrl = "http://staticmap.openstreetmap.de/staticmap.php?center="+posString+"&zoom=18&size=865x512&maptype=mapnik&markers="+posString;
             
@@ -83,7 +83,7 @@
             var lonlat = new OpenLayers.LonLat( lon, lat );
             lonlat.transform( new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject() );
             map.setCenter( lonlat, 18 );            
->>>>>>> introduced sessions for clients to store future oauth tokens
+
         }
 
         function error(msg) {
@@ -134,8 +134,7 @@
             }
         }
 
-<<<<<<< HEAD
-=======
+
         function acquireSessionId() {
                 // get possible local session id and send to server
                 // server will response with either the same session id if it is still valid
@@ -156,7 +155,6 @@
                 });               
             }            
         
->>>>>>> introduced sessions for clients to store future oauth tokens
 
         $(document).ready(function () {
             $.mobile.loadingMessage = "Determine position";
