@@ -30,7 +30,7 @@ function extractFromXML(xmlData) {
         var streetName = nameTag.attr("v").value();
         log("found streetname: " + streetName);
 
-        streets[streetName] = streetElement.attr("id").value();
+        streets[streetElement.attr("id").value()] = streetName;
     });
 
 

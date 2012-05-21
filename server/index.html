@@ -29,11 +29,12 @@
         function updateStreetSelector(streetData) {
             
             $("#streetselect").empty();
-            streets = "";
             var firstStreetSet = 0;
-            for (var street in streetData.name) {
-                var streetId = streetData[street];
-                streets += street + "<br/> ";
+            
+            for (var streetId in streetData.name) {
+                
+                var street = streetData.name[streetId];
+                
                 if ( firstStreetSet == 0) {
                     $("#streetselect").append('<option value="' + streetId+'">'+street+'</option>');
                     $("#streetselect").val(streetId);
@@ -44,7 +45,6 @@
             }
             $("#streetselect").selectmenu("refresh");
 
-            $("#currentPosition").html("Streets:<br/> " + streets);        
         }
         
         function getStreet(lat, lon) {
@@ -153,8 +153,41 @@
                         alert("error retrieving session id from server. please reload")
                     }
                 });               
-            }            
+            }
+                        
+        function startOAuhtProcess() {
+            
+        }
         
+        function submitHousenumber() {
+                var hn = $('#housenumberinput').val();
+                var street1 = $("#streetselect :selected").text();
+                console.log(street1);
+                alert( hn + street1 );
+                
+                // check for oauth to server
+                $.ajax({
+                    url:"checkoauth?id=" + sessionKey,
+                    type:"GET",
+                    dataType:"text",
+                    success:function (data) {
+                        if (data == 'OK') {
+                            console.log("TODO save housenumber");
+                        } else {
+                            startOAuhtProcess();           
+                        }            
+
+                    },
+                    error:function () {
+                        alert("error retrieving session id from server. please reload")
+                    }
+                });
+                // if not oauth, start session
+                
+                // save housenumber (send to server)
+                
+                
+        }        
 
         $(document).ready(function () {
             $.mobile.loadingMessage = "Determine position";
@@ -163,20 +196,17 @@
             
 
             $("#buttonGPS").click(gatherPosition);
-            $("#saveNumberButton").click ( submitHousenumber () );
+            $("#saveNumberButton").click ( submitHousenumber );
             // add osmdialog close action
             $("#osmloginsubmit").click(
                 function() {
                     osmusername=$("#osmusername").val();
                     osmpassword=$("#osmpassword").val();
                     $('.ui-dialog').dialog('close');
-                    
                     console.log("user: " + osmusername);
-                    
                     $("#osmloginbutton").html("logout");
                 }
             );
-            
         });
     </script>
 </head>
@@ -202,7 +232,7 @@
                     <label for="textinput2">
                         Housenumber
                     </label>
-                    <input id="textinput2" placeholder="" value="" type="text" />
+                    <input id="housenumberinput" placeholder="" value="" type="text" />
                 </fieldset>
             </div>
             <div data-role="fieldcontain">
